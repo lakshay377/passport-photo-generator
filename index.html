@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Premium Passport Photo Generator</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts for Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="min-h-screen bg-gray-900 text-white font-sans overflow-x-hidden">
+  <div class="container mx-auto p-4 md:p-8 max-w-7xl">
+    <!-- Header -->
+    <header class="flex flex-col md:flex-row justify-between items-center mb-8">
+      <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-500 animate-fadeIn">
+         Passport Photo Studio by Lakshay
+      </h1>
+      <div class="flex space-x-4">
+        <button id="themeToggle" class="p-2 rounded-full bg-gray-700 hover:bg-gray-600 transition-all shadow-lg">🌙</button>
+        <button id="previewToggle" class="p-2 rounded-full bg-gray-700 hover:bg-gray-600 transition-all shadow-lg">👁️ Preview</button>
+        <button id="autoSaveToggle" class="p-2 rounded-full bg-gray-700 hover:bg-gray-600 transition-all shadow-lg">💾 Auto-Save</button>
+        <button id="autoDownloadToggle" class="p-2 rounded-full bg-gray-700 hover:bg-gray-600 transition-all shadow-lg">📥 Auto-Download</button>
+      </div>
+    </header>
+
+    <!-- Main Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <!-- Left Sidebar -->
+      <div class="md:col-span-1 space-y-6">
+        <!-- Uploader -->
+        <div id="uploader" class="p-6 bg-gray-800 rounded-2xl shadow-xl border-dashed border-2 border-gray-600 hover:border-indigo-500 transition-all duration-300 glassmorphism animate-fadeIn cursor-pointer">
+          <p class="text-lg font-semibold bg-gradient-to-r from-indigo-500 to-blue-500 bg-clip-text text-transparent">Upload Your Photo</p>
+          <p class="text-sm text-gray-400 mt-1">Drag & Drop or Click (JPG, PNG)</p>
+          <input type="file" id="photoInput" accept="image/*" class="hidden">
+        </div>
+
+        <!-- Settings Panel -->
+        <div id="settingsPanel" class="p-6 bg-gray-800 rounded-2xl shadow-xl glassmorphism animate-fadeIn hidden">
+          <h2 class="text-xl font-semibold mb-4 bg-gradient-to-r from-indigo-500 to-blue-500 bg-clip-text text-transparent">Settings</h2>
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-300">Rows to Print (1-6)</label>
+              <select id="rowsToPrint" class="w-full p-3 mt-1 border border-gray-600 rounded-lg bg-gray-700 text-white focus:ring-2 focus:ring-indigo-500 transition-all">
+                <option value="6">6 Rows</option>
+                <option value="5">5 Rows</option>
+                <option value="4">4 Rows</option>
+                <option value="3">3 Rows</option>
+                <option value="2">2 Rows</option>
+                <option value="1">1 Row</option>
+              </select>
+            </div>
+            <button id="removeBg" class="w-full px-6 py-3 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-all duration-300 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">Remove Background</button>
+            <div>
+              <label class="block text-sm font-medium text-gray-300">Photo Background Color</label>
+              <select id="photoBg" class="w-full p-3 mt-1 border border-gray-600 rounded-lg bg-gray-700 text-white focus:ring-2 focus:ring-indigo-500 transition-all">
+                <option value="white">White</option>
+                <option value="lightgrey">Light Grey</option>
+                <option value="lightblue">Light Blue</option>
+                <option value="lightgreen">Light Green</option>
+                <option value="lightpink">Light Pink</option>
+                <option value="lightyellow">Light Yellow</option>
+                <option value="lightpurple">Light Purple</option>
+                <option value="lightorange">Light Orange</option>
+                <option value="red" selected>Red</option>
+                <option value="blue">Blue</option>
+                <option value="green">Green</option>
+                <option value="purple">Purple</option>
+                <option value="brown">Brown</option>
+                <option value="pink">Pink</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-300">White Space (cm)</label>
+              <input type="number" id="whiteSpace" step="0.1" min="0" value="0.2" class="w-full p-3 mt-1 border border-gray-600 rounded-lg bg-gray-700 text-white focus:ring-2 focus:ring-indigo-500 transition-all">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-300">Border (cm)</label>
+              <input type="number" id="border" step="0.1" min="0" value="0.05" class="w-full p-3 mt-1 border border-gray-600 rounded-lg bg-gray-700 text-white focus:ring-2 focus:ring-indigo-500 transition-all">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-300">Border Color</label>
+              <select id="borderColor" class="w-full p-3 mt-1 border border-gray-600 rounded-lg bg-gray-700 text-white focus:ring-2 focus:ring-indigo-500 transition-all">
+                <option value="black">Black</option>
+                <option value="blue">Blue</option>
+                <option value="red">Red</option>
+                <option value="green">Green</option>
+                <option value="purple">Purple</option>
+                <option value="orange">Orange</option>
+                <option value="brown">Brown</option>
+                <option value="pink">Pink</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-300">Resolution (DPI)</label>
+              <select id="dpi" class="w-full p-3 mt-1 border border-gray-600 rounded-lg bg-gray-700 text-white focus:ring-2 focus:ring-indigo-500 transition-all">
+                <option value="96">96 DPI (Screen)</option>
+                <option value="300" selected>300 DPI (Print)</option>
+                <option value="600">600 DPI (High Quality)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-300">Rotation (degrees)</label>
+              <input type="number" id="rotation" step="90" value="0" class="w-full p-3 mt-1 border border-gray-600 rounded-lg bg-gray-700 text-white focus:ring-2 focus:ring-indigo-500 transition-all">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-300">Zoom (x)</label>
+              <input type="number" id="zoom" step="0.1" min="0.5" max="2" value="1" class="w-full p-3 mt-1 border border-gray-600 rounded-lg bg-gray-700 text-white focus:ring-2 focus:ring-indigo-500 transition-all">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-300">Brightness (-100 to 100)</label>
+              <input type="range" id="brightness" min="-100" max="100" value="0" class="w-full p-3 mt-1 border border-gray-600 rounded-lg bg-gray-700 text-white focus:ring-2 focus:ring-indigo-500 transition-all">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-300">Contrast (-100 to 100)</label>
+              <input type="range" id="contrast" min="-100" max="100" value="0" class="w-full p-3 mt-1 border border-gray-600 rounded-lg bg-gray-700 text-white focus:ring-2 focus:ring-indigo-500 transition-all">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-300">Saturation (-100 to 100)</label>
+              <input type="range" id="saturation" min="-100" max="100" value="0" class="w-full p-3 mt-1 border border-gray-600 rounded-lg bg-gray-700 text-white focus:ring-2 focus:ring-indigo-500 transition-all">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-300">Sharpening (0-100)</label>
+              <input type="range" id="sharpening" min="0" max="100" value="0" class="w-full p-3 mt-1 border border-gray-600 rounded-lg bg-gray-700 text-white focus:ring-2 focus:ring-indigo-500 transition-all">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-300">Vignette (0-100)</label>
+              <input type="range" id="vignette" min="0" max="100" value="0" class="w-full p-3 mt-1 border border-gray-600 rounded-lg bg-gray-700 text-white focus:ring-2 focus:ring-indigo-500 transition-all">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-300">Shadow (0-20 px)</label>
+              <input type="range" id="shadow" min="0" max="20" value="0" class="w-full p-3 mt-1 border border-gray-600 rounded-lg bg-gray-700 text-white focus:ring-2 focus:ring-indigo-500 transition-all">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-300">Flip</label>
+              <div class="flex space-x-4">
+                <button id="flipHorizontal" class="px-4 py-2 bg-gray-700 rounded-lg hover:bg-gray-600 transition-all shadow-md">Flip Horizontal</button>
+                <button id="flipVertical" class="px-4 py-2 bg-gray-700 rounded-lg hover:bg-gray-600 transition-all shadow-md">Flip Vertical</button>
+              </div>
+            </div>
+            <button id="undo" class="w-full px-6 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">↺ Undo</button>
+            <button id="redo" class="w-full px-6 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">↻ Redo</button>
+          </div>
+        </div>
+
+        <!-- Background Color Chooser -->
+        <div id="bgChoose" class="p-6 bg-gray-800 rounded-2xl shadow-xl glassmorphism animate-fadeIn hidden">
+          <h2 class="text-xl font-semibold mb-4 bg-gradient-to-r from-indigo-500 to-blue-500 bg-clip-text text-transparent">Choose Photo Background</h2>
+          <p class="text-sm text-gray-400 mb-2">Use Settings panel for continuous changes.</p>
+          <select id="photoBgTemp" class="w-full p-3 mt-1 border border-gray-600 rounded-lg bg-gray-700 text-white focus:ring-2 focus:ring-indigo-500 transition-all">
+            <option value="white">White</option>
+            <option value="lightgrey">Light Grey</option>
+            <option value="lightblue">Light Blue</option>
+            <option value="lightgreen">Light Green</option>
+            <option value="lightpink">Light Pink</option>
+            <option value="lightyellow">Light Yellow</option>
+            <option value="lightpurple">Light Purple</option>
+            <option value="lightorange">Light Orange</option>
+            <option value="red" selected>Red</option>
+            <option value="blue">Blue</option>
+            <option value="green">Green</option>
+            <option value="purple">Purple</option>
+            <option value="brown">Brown</option>
+            <option value="pink">Pink</option>
+          </select>
+          <button id="applyPhotoBg" class="mt-4 w-full px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all duration-300 shadow-lg">Apply & Fix on A4</button>
+        </div>
+      </div>
+
+      <!-- Right Section -->
+      <div class="md:col-span-3">
+        <!-- Cropper -->
+        <div id="cropper" class="p-6 bg-gray-800 rounded-2xl shadow-xl glassmorphism animate-fadeIn hidden">
+          <canvas id="cropCanvas" class="w-full max-w-full rounded-lg border border-gray-600 shadow-inner"></canvas>
+          <div class="mt-4 flex space-x-4">
+            <button id="cropButton" class="flex-1 px-6 py-3 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition-all duration-300 shadow-lg">Crop & Proceed</button>
+            <button id="autoCrop" class="flex-1 px-6 py-3 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-all duration-300 shadow-lg">Auto-Crop</button>
+          </div>
+        </div>
+
+        <!-- Preview -->
+        <div id="preview" class="p-6 bg-gray-800 rounded-2xl shadow-xl glassmorphism animate-fadeIn hidden">
+          <canvas id="previewCanvas" class="w-full max-w-full rounded-lg border border-gray-600 shadow-inner" style="background-color: #ffffff;"></canvas>
+          <div class="mt-6 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+            <button id="downloadJPG" class="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all duration-300 shadow-lg">Download JPG</button>
+            <button id="downloadPDF" class="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all duration-300 shadow-lg">Download PDF</button>
+            <button id="recrop" class="px-6 py-3 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-all duration-300 shadow-lg">Recrop Photo</button>
+            <button id="autoDownload" class="px-6 py-3 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-all duration-300 shadow-lg">Auto-Download Now</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="assets/fabric.min.js"></script>
+  <script src="assets/axios.min.js"></script>
+  <script src="assets/jspdf.umd.min.js"></script>
+  <script src="assets/html2canvas.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

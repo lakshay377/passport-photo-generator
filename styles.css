@@ -1,0 +1,125 @@
+/* Glassmorphism Effect */
+.glassmorphism {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.glassmorphism:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* FadeIn Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Input, Select, Button Transitions */
+input, select, button {
+  transition: all 0.3s ease;
+}
+
+/* Custom Range Slider */
+input[type="range"] {
+  -webkit-appearance: none;
+  height: 8px;
+  border-radius: 5px;
+  background: #4a5568;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #6366f1;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+input[type="range"]:focus::-webkit-slider-thumb {
+  background: #4f46e5;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+}
+
+/* Dark Theme Styles */
+.dark .bg-gray-900 {
+  background-color: #1a202c !important;
+}
+
+.dark .text-white {
+  color: #e2e8f0 !important;
+}
+
+.dark .text-gray-300 {
+  color: #a0aec0 !important;
+}
+
+.dark .border-gray-600 {
+  border-color: #4a5568 !important;
+}
+
+.dark .bg-gray-800 {
+  background-color: #2d3748 !important;
+}
+
+/* Preview Canvas Styling */
+#previewCanvas {
+  background-color: #ffffff; /* Default to white for A4 sheet */
+  border: 1px solid #a0aec0;
+}
+
+/* Container and Grid Layout */
+.container {
+  max-width: 100%;
+}
+
+.grid-cols-4 {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
+  gap: 1.5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  h1 {
+    font-size: 2rem;
+  }
+  .grid-cols-4 {
+    grid-template-columns: 1fr;
+  }
+  button {
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0.5rem;
+  }
+  h1 {
+    font-size: 1.5rem;
+  }
+  button {
+    font-size: 0.75rem;
+    padding: 0.375rem 0.75rem;
+  }
+}
